@@ -2426,25 +2426,19 @@ ifioctl_get(u_long cmd, caddr_t data)
 		error = if_clone_list((struct if_clonereq *)data);
 		return (error);
 	case SIOCGIFGMEMB:
-		KERNEL_LOCK();
 		NET_LOCK_SHARED();
 		error = if_getgroupmembers(data);
 		NET_UNLOCK_SHARED();
-		KERNEL_UNLOCK();
 		return (error);
 	case SIOCGIFGATTR:
-		KERNEL_LOCK();
 		NET_LOCK_SHARED();
 		error = if_getgroupattribs(data);
 		NET_UNLOCK_SHARED();
-		KERNEL_UNLOCK();
 		return (error);
 	case SIOCGIFGLIST:
-		KERNEL_LOCK();
 		NET_LOCK_SHARED();
 		error = if_getgrouplist(data);
 		NET_UNLOCK_SHARED();
-		KERNEL_UNLOCK();
 		return (error);
 	}
 
