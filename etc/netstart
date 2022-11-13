@@ -292,7 +292,7 @@ ip6routes() {
 wait_autoconf_default() {
 	local _count=0
 
-	if ifconfig | grep -q ': flags=.*<.*AUTOCONF.*>'; then
+	if ifconfig | grep -q ': flags=.*<.*RUNNING.*AUTOCONF.*>'; then
 		while ((_count++ < 20)); do
 			route -n show | grep -q ^default && break
 			sleep .5
