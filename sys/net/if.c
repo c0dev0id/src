@@ -1946,11 +1946,9 @@ ifioctl(struct socket *so, u_long cmd, caddr_t data, struct proc *p)
 	case SIOCSIFGATTR:
 		if ((error = suser(p)) != 0)
 			return (error);
-		KERNEL_LOCK();
 		NET_LOCK();
 		error = if_setgroupattribs(data);
 		NET_UNLOCK();
-		KERNEL_UNLOCK();
 		return (error);
 	case SIOCGIFCONF:
 	case SIOCIFGCLONERS:
@@ -3008,8 +3006,10 @@ if_setgroupattribs(caddr_t data)
 
 	ifg->ifg_carp_demoted += demote;
 
+	KERNEL_LOCK();	/* for carp_ifgattr_ioctl() only */
 	TAILQ_FOREACH(ifgm, &ifg->ifg_members, ifgm_next)
 		ifgm->ifgm_ifp->if_ioctl(ifgm->ifgm_ifp, SIOCSIFGATTR, data);
+	KERNEL_UNLOCK();
 
 	return (0);
 }
