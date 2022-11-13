@@ -1018,9 +1018,11 @@ nd6_ioctl(u_long cmd, caddr_t data, struct ifnet *ifp)
 
 	switch (cmd) {
 	case SIOCGIFINFO_IN6:
+		KERNEL_LOCK();
 		NET_LOCK_SHARED();
 		ndi->ndi = *ND_IFINFO(ifp);
 		NET_UNLOCK_SHARED();
+		KERNEL_UNLOCK();
 		return (0);
 	case SIOCGNBRINFO_IN6:
 	{
@@ -1028,6 +1030,7 @@ nd6_ioctl(u_long cmd, caddr_t data, struct ifnet *ifp)
 		struct in6_addr nb_addr = nbi->addr; /* make local for safety */
 		time_t expire;
 
+		KERNEL_LOCK();
 		NET_LOCK_SHARED();
 		/*
 		 * XXX: KAME specific hack for scoped addresses
@@ -1046,6 +1049,7 @@ nd6_ioctl(u_long cmd, caddr_t data, struct ifnet *ifp)
 		    (ln = (struct llinfo_nd6 *)rt->rt_llinfo) == NULL) {
 			rtfree(rt);
 			NET_UNLOCK_SHARED();
+			KERNEL_UNLOCK();
 			return (EINVAL);
 		}
 		expire = ln->ln_rt->rt_expire;
@@ -1061,6 +1065,7 @@ nd6_ioctl(u_long cmd, caddr_t data, struct ifnet *ifp)
 
 		rtfree(rt);
 		NET_UNLOCK_SHARED();
+		KERNEL_UNLOCK();
 		return (0);
 	}
 	}
