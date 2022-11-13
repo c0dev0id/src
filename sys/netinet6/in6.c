@@ -296,6 +296,7 @@ in6_ioctl_change_ifaddr(u_long cmd, caddr_t data, struct ifnet *ifp)
 			return (error);
 	}
 
+	KERNEL_LOCK();
 	NET_LOCK();
 
 	if (sa6 != NULL) {
@@ -402,6 +403,7 @@ in6_ioctl_change_ifaddr(u_long cmd, caddr_t data, struct ifnet *ifp)
 
 err:
 	NET_UNLOCK();
+	KERNEL_UNLOCK();
 	return (error);
 }
 
