@@ -134,9 +134,7 @@ soo_ioctl(struct file *fp, u_long cmd, caddr_t data, struct proc *p)
 		}
 		if (IOCGROUP(cmd) == 'r')
 			return (EOPNOTSUPP);
-		KERNEL_LOCK();
 		error = pru_control(so, cmd, data, NULL);
-		KERNEL_UNLOCK();
 		break;
 	}
 

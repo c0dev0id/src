@@ -199,6 +199,8 @@ in6_control(struct socket *so, u_long cmd, caddr_t data, struct ifnet *ifp)
 	int privileged;
 	int error;
 
+	KERNEL_LOCK();
+
 	privileged = 0;
 	if ((so->so_state & SS_PRIV) != 0)
 		privileged++;
@@ -214,6 +216,8 @@ in6_control(struct socket *so, u_long cmd, caddr_t data, struct ifnet *ifp)
 		error = in6_ioctl(cmd, data, ifp, privileged);
 		break;
 	}
+
+	KERNEL_UNLOCK();
 
 	return error;
 }
