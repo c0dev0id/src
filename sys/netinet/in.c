@@ -202,8 +202,6 @@ in_control(struct socket *so, u_long cmd, caddr_t data, struct ifnet *ifp)
 	int privileged;
 	int error;
 
-	KERNEL_LOCK();
-
 	privileged = 0;
 	if ((so->so_state & SS_PRIV) != 0)
 		privileged++;
@@ -212,15 +210,17 @@ in_control(struct socket *so, u_long cmd, caddr_t data, struct ifnet *ifp)
 #ifdef MROUTING
 	case SIOCGETVIFCNT:
 	case SIOCGETSGCNT:
+		KERNEL_LOCK();
 		error = mrt_ioctl(so, cmd, data);
+		KERNEL_UNLOCK();
 		break;
 #endif /* MROUTING */
 	default:
+		KERNEL_LOCK();
 		error = in_ioctl(cmd, data, ifp, privileged);
+		KERNEL_UNLOCK();
 		break;
 	}
-
-	KERNEL_UNLOCK();
 
 	return error;
 }
