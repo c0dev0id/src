@@ -609,9 +609,16 @@ shell(Source *volatile s, volatile int toplevel)
 			j_notify();
 			mcheck();
 			set_prompt(PS1);
+			/* Reset xterm title */
+			char *d = str_val(global("DISPLAY"));
+			if(d[0] > 0) {
+				shellnof("%c]0;$ ksh (%s)%c",
+					'\033', current_wd, '\007');
+			}
 		}
 
 		t = compile(s);
+
 		if (t != NULL && t->type == TEOF) {
 			if (wastty && Flag(FIGNOREEOF) && --attempts > 0) {
 				shellf("Use `exit' to leave ksh\n");

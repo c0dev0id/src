@@ -1157,6 +1157,10 @@ getsc_line(Source *s)
 			s->line++;
 			histsave(s->line, s->str, 1);
 		}
+		/* Set xterm title */
+		char *d = str_val(global("DISPLAY"));
+		if(d[0] > 0)
+			shellf("%c]0;$ %s%c", '\033', s->str, '\007');
 	}
 	if (interactive)
 		set_prompt(PS2);

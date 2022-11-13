@@ -475,6 +475,8 @@ void	internal_warningf(const char *, ...)
 void	error_prefix(int);
 void	shellf(const char *, ...)
 	    __attribute__((__format__ (printf, 1, 2)));
+void	shellnof(const char *, ...)
+	    __attribute__((__format__ (printf, 1, 2)));
 void	shprintf(const char *, ...)
 	    __attribute__((__format__ (printf, 1, 2)));
 #ifdef KSH_DEBUG

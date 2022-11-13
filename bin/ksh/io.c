@@ -149,6 +149,20 @@ shellf(const char *fmt, ...)
 	shf_flush(shl_out);
 }
 
+/* printf to shl_out (stderr) without flush */
+void
+shellnof(const char *fmt, ...)
+{
+	va_list va;
+
+	if (!initio_done) /* shl_out may not be set up yet... */
+		return;
+	va_start(va, fmt);
+	shf_vfprintf(shl_out, fmt, va);
+	va_end(va);
+}
+
+
 /* printf to shl_stdout (stdout) */
 void
 shprintf(const char *fmt, ...)
