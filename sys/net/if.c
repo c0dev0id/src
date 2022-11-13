@@ -2416,11 +2416,9 @@ ifioctl_get(u_long cmd, caddr_t data)
 
 	switch(cmd) {
 	case SIOCGIFCONF:
-		KERNEL_LOCK();
 		NET_LOCK_SHARED();
 		error = ifconf(data);
 		NET_UNLOCK_SHARED();
-		KERNEL_UNLOCK();
 		return (error);
 	case SIOCIFGCLONERS:
 		error = if_clone_list((struct if_clonereq *)data);
